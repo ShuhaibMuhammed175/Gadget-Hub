@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% extends 'app/main.html' %}
+{% load humanize %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+{% block nav %}
+<li class="nav-item">
+    <form action="{% url 'search' %}" class="d-flex" method="get">
+        <input aria-label="Search" class="form-control me-2" id="search_id" name="search"
+               placeholder="Search" type="search">
+        <button class="btn btn-outline-light" type="submit">
+            <i class="fa fa-search"></i>
+        </button>
+    </form>
+</li>
+{% endblock %}
+{% block content %}
+{% include 'app/message.html' %}
+{% include 'app/slider.html' %}
+<section class="py-1 text-center container">
+    <div class="row py-lg-3">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light">Best in sales...</h1>
+            <p class="lead text-muted">Our most popular products, based on sales. Updated hourly.</p>
+            <p>
+            </p>
+        </div>
+    </div>
+</section>
+
+
+<section class="bg-light py-4 my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+            </div>
+            {% csrf_token %}
+            {% for item in products %}
+            <div class="col-md-4 col-lg-3">
+                <div class="card my-3 my_class">
+                    <a href="{% url 'fetch_product' item.id item.category %}">
+                        <img alt="Categories" class="card-img-top  my_class fixed-image-height"
+                             src="{{item.product_image.url}}">
+                        <div class="card-body">
+                            <h5 class="card-title text-dark font-weight-bold">{{item.name | upper}}</h5>
+                            <div class="d-flex justify-content-between">
+                                <span class="old_price"><s>Rs {{item.old_price | stringformat:'d' | intcomma }} </s></span>
+                                <span class="new_price">Rs {{item.new_price | stringformat:'d' | intcomma }} /-</span>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <a class="button-85" href="{% url 'fetch_product' item.id item.category %}"
+                                   role="button">Detail View</a>
+                                <div>
+                                    <input class="product-id" type="hidden" value="{{item.id}}">
+                                    <button class="button-85 wishlist-button" role="button">Wishlist</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}
+{% block scripts %}
+<script src="{% static 'js/home.js' %}"></script>
+{% endblock scripts %}
+</body>
+</html>

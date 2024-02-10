@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% extends 'app/main.html' %}
+{% load humanize %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+{% block nav %}
+    <li class="nav-item">
+        <form action="{% url 'category_products_search' product_category %}" class="d-flex" method="get">
+            <input aria-label="Search" class="form-control me-2" id="search_id" name="search" placeholder="Search" type="search">
+            <button class="btn btn-outline-light" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+    </li>
+{% endblock %}
+{% block content %}
+    <section class="bg-light py-4 my-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    {% include 'app/message.html' %}
+                </div>
+                {% for item in products %}
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card my-3 my_class">
+                            <a href="{% url 'fetch_product' item.id product_category %}">
+                                <img alt="Categories" class="card-img-top fixed-image-height" src="{{item.product_image.url}}">
+                                <div class="card-body">
+                                    <a href="{% url 'fetch_product' item.id product_category %}">
+                                        <h5 class="card-title font-weight-bold ">{{item.name | upper}}</h5>
+                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="old_price"><s>Rs {{item.new_price | stringformat:'d' | intcomma}}</s></span>
+                                        <span class="new_price">Rs {{item.old_price | stringformat:'d' | intcomma}} /-</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <a href="{% url 'fetch_product' item.id product_category %}" class="button-85" role="button">View</a>
+                                        <button class="button-85" role="button">Add to cart</button>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+</body>
+</html>

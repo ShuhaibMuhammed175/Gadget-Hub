@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% extends 'app/main.html' %}
+{% load humanize %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+</head>
+<body>
+{% block nav %}
+<li class="nav-item">
+    <form action="{% url 'cart_search' %}" class="d-flex" method="get">
+        <input aria-label="Search" class="form-control me-2" id="search_id" name="search"
+               placeholder="Search" type="search">
+        <button class="btn btn-outline-light" type="submit">
+            <i class="fa fa-search"></i>
+        </button>
+    </form>
+</li>
+{% endblock %}
+{% block content %}
+
+{% if all_products %}
+<section class="bg-light py-4 my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+            </div>
+
+            <table>
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Action</th>
+                </tr>
+                {% for item in all_products %}
+                <tr>
+                    <td><img alt="{{ item.product.name }}" height="75px;" src="{{ item.product.product_image.url }}">
+                    </td>
+                    <td>{{ item.product.name }}</td>
+                    <td>{{ item.product.new_price | stringformat:'d' | intcomma }}/-</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.total_price | stringformat:'d' | intcomma }}/-</td>
+                    <td>
+                        <a href="{% url 'remove_from_cart' item.product.id %}"
+                           onclick="return confirm('Are you sure want to remove? ')">
+                            <button class="button-85" type="submit"><i class="fa fa-trash"></i></button>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+
+                <tr>
+                    <td colspan="6"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</section>
+{% else %}
+<div class="wrapper">
+        <section class="bg-light py-4 my-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 d-flex flex-column align-items-center justify-content-center">
+                        <h4 class="mb-3">Nothing found</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endif %}
+{% endblock content %}
+
+</body>
+</html>

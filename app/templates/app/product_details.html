@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% extends 'app/main.html' %}
+{% load static %}
+{% load humanize %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+</head>
+<body>
+{% block nav %}
+<li class="nav-item">
+    <form action="{% url 'search' %}" class="d-flex" method="get">
+        <input aria-label="Search" class="form-control me-2" id="search_id" name="search"
+               placeholder="Search" type="search">
+        <button class="btn btn-outline-light" type="submit">
+            <i class="fa fa-search"></i>
+        </button>
+    </form>
+</li>
+{% endblock %}
+{% block content %}
+<section class="bg-light py-4 my-5">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'category_products' product.category.name  %}">{{product.category}}</a>
+                        </li>
+                        <li aria-current="page" class="breadcrumb-item active">{{product}}</li>
+                    </ol>
+                </nav>
+                {% include 'app/message.html' %}
+            </div>
+            <!-- ... (previous HTML) ... -->
+
+            <div class="col-4 my-3">
+                <img alt="Product" class="card-img-top my_class" src="{{product.product_image.url}}">
+            </div>
+
+           <!-- ... (previous HTML) ... -->
+
+<div class="col-4 my-3">
+    <h5 class="text-success">{{product.name | upper}}</h5>
+    <p>Seller: {{product.vendor}}</p>
+    <p>{{product.desc}}</p>
+    <h6 class="my-2 text-danger">Current Price: Rs <s>{{product.old_price|stringformat:'d'|intcomma}}/-</s></h6>
+    <h5 class="my-2">Offer Price: Rs {{product.new_price|stringformat:'d'|intcomma}}/-</h5>
+    <div class="my-3">
+        {% if product.quantity >= 1 %}
+        <input id="product_id" type="hidden" value="{{product.id}}">
+        {% csrf_token %}
+        <p>
+        <div class="input-group" style="width:150px">
+            <button class="button-91" id="btnMinus" role="button"><i class="fa fa-minus"></i></button>
+            <input class="form-control text-center" id="txtQty" name="qty" type="text" value="1">
+            <button class="button-91" id="btnPlus" role="button"><i class="fa fa-plus"></i></button>
+        </div>
+        </p>
+        <button class="button-85" id="cartBtn" role="button">Add to cart</button>
+        {% else %}
+        <button class="button-85" role="button">Out of stock</button>
+        {% endif %}
+        <button class="button-85" id="wishlist" role="button"><i class="fa fa-heart"></i></button>
+        {% if order %}
+        <h4 class="review">Reviews</h4>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <input name="product_id" type="hidden" value="{{product.id}}">
+            <textarea class="form-control review" name="review" placeholder="Add your review here" rows="3"></textarea>
+            <button class="button-85 review" role="button" type="submit">Submit Review</button>
+        </form>
+         {% endif %}
+
+        <!-- Check if the review variable exists -->
+        {% if review %}
+<div class="my-4">
+    <h4 class="review">Customer Reviews</h4>
+    <div class="reviews">
+        {% for i in review %}
+        <div class="review-item">
+            <div class="review-header">
+                <h4><b>{{i.user}}</b></h4>
+            </div>
+            <div class="review-content">
+                <p>{{ i.content }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<p>No reviews yet. Be the first to leave a review!</p>
+{% endif %}
+
+    </div>
+</div>
+
+<!-- ... (rest of your HTML) ... -->
+
+
+
+            <!-- ... (rest of your HTML) ... -->
+
+        </div>
+    </div>
+</section>
+{% endblock content %}
+{% block scripts %}
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock scripts %}
+</body>
+</html>

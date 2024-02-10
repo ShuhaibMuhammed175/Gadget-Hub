@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>msg</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+{% if messages %}
+{% for msg in messages %}
+<div class="alert alert-info alert-dismissible fade show msgcss text-center" role="alert">
+     {% if message.tags %} class="{{ msg.tags }}"{% endif %}{{ msg }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
+</body>
+</html>

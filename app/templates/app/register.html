@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% extends 'app/main.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+
+{% block content %}
+<div style="display: flex; justify-content: center; align-items: center; height: 100vh; padding: 100px;">
+    <div>
+        {% include 'app/message.html' %}
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="form-label">Username</label>
+                {{ form.username }}
+                {% if form.errors.username %}
+                <label class="text-danger">{{ form.errors.username }}</label>
+                {% endif %}
+            </div>
+            <div class="mb-4">
+                <label for="email" class="form-label">Email</label>
+                {{ form.email }}
+                {% if form.errors.email %}
+                <label class="text-danger">{{ form.errors.email }}</label>
+                {% endif %}
+            </div>
+            <div class="mb-4">
+                <label for="password1" class="form-label">Password</label>
+                {{ form.password1 }}
+                {% if form.errors.password1 %}
+                <label class="text-danger">{{ form.errors.password1 }}</label>
+                {% endif %}
+            </div>
+            <div class="mb-4">
+                <label for="password2" class="form-label">Confirm Password</label>
+                {{ form.password2 }}
+                {% if form.errors.password2 %}
+                <label class="text-danger">{{ form.errors.password2 }}</label>
+                {% endif %}
+            </div>
+            <button class="button-85" type="submit">Register</button>
+            <p class="my-2">Already a user? <a href="{% url 'login' %}">Login</a></p>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+
+</body>
+</html>

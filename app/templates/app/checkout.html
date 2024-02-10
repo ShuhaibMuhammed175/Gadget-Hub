@@ -1,0 +1,78 @@
+{% extends 'app/main.html' %}
+{% load static %}
+{% load humanize %}
+<link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+{% block content %}
+<div class="row" style="margin-top: 70px; margin-left:30px; margin-right:30px;">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+            <form action="{% url 'order_update' %}" id="form" method="POST">
+                <div id="user-info">
+                    <div class="form-field">
+                        <input class="form-control" name="name" placeholder="Name.." required type="text">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" name="email" placeholder="Email.." required type="email">
+                    </div>
+                </div>
+
+                <div id="shipping-info">
+                    <hr>
+                    <p>Shipping Information:</p>
+                    <hr>
+                    <div class="form-field">
+                        <input class="form-control" name="address" placeholder="Address.." type="text">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" name="city" placeholder="City.." type="text">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" name="state" placeholder="State.." type="text">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" name="zipcode" placeholder="Zip code.." type="text">
+                    </div>
+                    <div class="form-field">
+                        <input class="form-control" name="country" placeholder="Zip code.." type="text">
+                    </div>
+                </div>
+
+                <hr>
+
+                <a class="button-85" type="submit" id="form-button" >Place Order</a>
+            </form>
+        </div>
+		<br>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="box-element">
+            <a class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+            <hr>
+            <h3>Order Summary</h3>
+            {% csrf_token %}
+            {% for item in products %}
+            <hr>
+            <input class="product_id" type="hidden" value="{{item.product.id}}">
+            <input class="quantity" type="hidden" value="{{item.quantity}}">
+            <div class="cart-row">
+                <div style="flex:2"><img class="row-image" src="{{item.product.product_image.url}}"></div>
+                <div style="flex:2"><p>{{item.product.name}}</p></div>
+                <div style="flex:1"><p>${{item.product.new_price|stringformat:'d'| intcomma}}</p></div>
+                <div style="flex:1"><p>x{{item.quantity}}</p></div>
+            </div>
+            {% endfor %}
+            <h5 id="total_qty">Items : {{sub_qty}} </h5>
+            <h5 id="total_amt">Total : Rs {{sub_total |stringformat:'d'| intcomma }}</h5>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+{% block scripts %}
+<script src="{% static 'js/checkout.js' %}"></script>
+{% endblock scripts %}
+
+
+
