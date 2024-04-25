@@ -7,7 +7,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .form import user_creation
 from .models import Category, Product, Cart, Wishlist, Order, OrderDetail, Review
 
-
+'''
+Checking
+'''
 def home(request):
     all_products = Product.objects.all()
 
